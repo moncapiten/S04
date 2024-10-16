@@ -2,11 +2,11 @@ dataPosition = '../../Data/';
 filename = 'dataBode001';
 filename2 = 'dataBode003';
 
-mediaposition = '../Media/';
-medianame = strcat('plot', filename);
+mediaposition = '../../Media/';
+medianame = 'AmplitudeOffsetIn';
 
-flagSave = true;
-flagFit = true;
+flagSave = false;
+
 % data import and creation of variance array
 rawData = readmatrix(strcat(dataPosition, filename, '.txt'));
 rawData2 = readmatrix(strcat(dataPosition, filename2, '.txt'));
@@ -24,17 +24,26 @@ oi2 = rawData2(:, 10);
 vo2 = rawData2(:, 6);
 
 
+
 semilogx(ff, vi, 'o', Color = '#0027BD');
 hold on
 semilogx(ff, oi, 'o', Color = 'blue');
 semilogx(ff, vi2, 'v', Color = 'magenta');
 semilogx(ff, oi2, 'v', Color = 'red');
-%semilogx(ff, vo, 'v', Color = 'red')
-%semilogx(ff, oo, 'v', Color = '#ffa500')
 
+grid on
+grid minor
+title('Amlitude and Offset of input signal');
+legend('Amplitude in - 4.5k divider', 'Offset in - 4.5k divider', 'Amplitude in - 45k divider', 'Offset in - 45k divider', Location= 'ne')
 ylabel('Vi Amplitude [V]')
 xlabel('frequency [Hz]')
 
 hold off
 
-%plot(vi, oi, 'o')
+
+
+if flagSave
+    fig = gcf;
+    orient(fig, 'landscape')
+    print(fig, strcat(mediaposition, medianame, '.pdf'), '-dpdf')
+end
