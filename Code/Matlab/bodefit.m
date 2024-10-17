@@ -1,11 +1,13 @@
 dataPosition = '../../Data/';
-filename = 'AD8031';
-%filename2 = 'dataBode003';
+filename = 'dataBode001';
+%filename = 'OP77';
 
 mediaposition = '../../Media/';
 medianame = strcat('bodePlotAndFit-', filename);
 
-flagSave = true;
+flagSave = false;
+flagdB = true;
+flagDeg = true;
 
 % data import and creation of variance array
 rawData = readmatrix(strcat(dataPosition, filename, '.txt'));
@@ -15,8 +17,13 @@ ff = rawData(:, 1);
 A = rawData(:, 2);
 ph = rawData(:, 3);
 
-A = 10.^(A/20);
-ph = ph.*pi/180;
+
+if flagdB
+    A = 10.^(A/20);
+end
+if flagDeg
+    ph = ph.*pi/180;
+end
 
 R1 = 1000;
 R2 = 1e5;
@@ -30,8 +37,8 @@ A0 = 100;
 
 p0 = [A0, t0];
 
-A2 = A(1 : 900);
-f2 = ff(1 : 900);
+A2 = A(1 : 100);
+f2 = ff(1 : 100);
 
 function y = gain(params, f)
 
