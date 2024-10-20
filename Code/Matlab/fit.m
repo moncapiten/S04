@@ -6,7 +6,7 @@ filename = 'dataSchmitt001';
 mediaposition = '../../Media/';
 medianame = strcat('plot', filename);
 
-flagSave = false;
+flagSave = true;
 flagFit = true;
 % data import and creation of variance array
 rawData = readmatrix(strcat(dataPosition, filename, '.txt'));
@@ -81,8 +81,8 @@ end
 ki = ki/(length(tt)-4);
 
 ko = 0;
-for i = 1:length(Ro)
-    ko = ko + Ro(i)^2/s_o(i)^2;
+for i = 1:length(Ro1)
+    ko = ko + Ro1(i)^2/s_o(i)^2;
 end
 ko = ko/(length(tt)-4);
 
