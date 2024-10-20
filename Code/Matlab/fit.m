@@ -6,7 +6,7 @@ filename = 'dataSchmitt001';
 mediaposition = '../../Media/';
 medianame = strcat('plot', filename);
 
-flagSave = true;
+flagSave = false;
 flagFit = true;
 % data import and creation of variance array
 rawData = readmatrix(strcat(dataPosition, filename, '.txt'));
@@ -22,8 +22,6 @@ function y = funcSine(params, t)
     w = 2 * pi * params(2);
     y = params(1) .* sin( w*t + params(3)) ;%+ params(4);
 end
-
-
 
 function y = funcSquare(params, t)
     w = 2 * pi .* params(2);
@@ -54,9 +52,19 @@ p0o = [ ao, f0, ph0o, oo];
 
 
 % fit and k^2 calculation
-[betai, Ri, ~, covbetai] = nlinfit(tt, vi, @funcSine, p0i);
+% 2 sin functions
+%[betai, Ri, ~, covbetai] = nlinfit(tt, vi, @funcSine, p0i);
 %[betao, Ro, ~, covbetao] = nlinfit(tt, vo, @funcSine, p0o);
+
+% sin in, sqwave out
+[betai, Ri, ~, covbetai] = nlinfit(tt, vi, @funcSine, p0i);
 [betao, Ro, ~, covbetao] = nlinfit(tt, vo, @funcSquare, p0o);
+
+
+
+
+
+
 
 vo1 = [];
 tt1 = [];
