@@ -2,7 +2,7 @@ clear all;
 
 % Data( media) position and name, to retrieve( save) files from( to) the correct position
 dataPosition = '../../Data/';
-filename = 'dataBode011';
+filename = 'dataBode009';
 %filename = 'AD8031';
 
 mediaposition = '../../Media/';
@@ -12,7 +12,7 @@ medianame = strcat('bodePlotAndFit-', filename);
 flagSave = false;
 flagdB = false;
 flagDeg = false;
-flagLimited = true;
+flagLimited = false;
 limit = 85;
 
 % data import and conditioning
@@ -36,14 +36,14 @@ if flagLimited
 end
 
 % setting of fit parameters and function
-Ra = 221.00e3;
+Ra = 3.2822e3;
 Rb = 1490.3;
 b = Rb / (Ra+Rb);
-G = 1000;
+G = 100;
 
 %G0 = 100;
 G0 = G * b;
-f0 = 5e4;
+f0 = 4e5;
 tau0 = 1/(2*pi*f0);
 p0tf = [G0, tau0];
 
