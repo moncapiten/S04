@@ -1,19 +1,21 @@
 clear all;
 
+% Data( media) position and name, to retrieve( save) files from( to) the correct position
 dataPosition = '../../Data/';
-filename = 'dataBode006';
+filename = 'dataBode011';
 %filename = 'AD8031';
 
 mediaposition = '../../Media/';
-medianame = strcat('bodePlotAndFit-Simulation', filename);
+medianame = strcat('bodePlotAndFit-', filename);
 
+% flags, change the working code to condition the data differently based on necessity
 flagSave = false;
 flagdB = false;
 flagDeg = false;
 flagLimited = true;
-limit = 80;
+limit = 85;
 
-% data import and creation of variance array
+% data import and conditioning
 rawData = readmatrix(strcat(dataPosition, filename, '.txt'));
 
 ff = rawData(:, 1);
@@ -33,15 +35,15 @@ if flagLimited
     p2 = ph(1 : limit);
 end
 
-
-Ra = 3.2822e3;
+% setting of fit parameters and function
+Ra = 221.00e3;
 Rb = 1490.3;
 b = Rb / (Ra+Rb);
-G = 100;
+G = 1000;
 
 %G0 = 100;
 G0 = G * b;
-f0 = 4e3;
+f0 = 5e4;
 tau0 = 1/(2*pi*f0);
 p0tf = [G0, tau0];
 
@@ -73,7 +75,7 @@ end
 
 
 
-
+% double plot, no residuals
 t = tiledlayout(2, 1, "TileSpacing", 'tight', 'Padding', 'compact');
 
 ax1 = nexttile;
@@ -112,7 +114,7 @@ grid on
 grid minor
 hold off
 
-title(t, strcat('Gain and Phase of Amplifier - Simulation', filename));
+title(t, strcat('Gain and Phase of Amplifier - ', filename));
 
 if flagLimited
     legend(ax1, 'Original Data', 'Fit Data', 'model - p0', 'model - fit', Location= 'ne');
@@ -140,7 +142,7 @@ str = sprintf('GBWP = %.2e', 1/(2*pi*beta(2)) * beta(1)/b  ) ;
 annotation('textbox',dim,'String',str,'FitBoxToText','on', 'Interpreter', 'tex', 'BackgroundColor', 'white');
 
 
-
+% saving only if flag set
 if flagSave
     fig = gcf;
     orient(fig, 'landscape')
