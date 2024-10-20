@@ -8,8 +8,10 @@ filename3 = 'dataBode008';
 mediaposition = '../../Media/';
 medianame = 'GBWP-OP77';
 
-flagSave = true;
+flagSave = false;
 
+GBWP = [4.40e5, 4.55e5, 4.54e5];
+%GBWP = [4.60e7, 4.73e7, 4.81e7];
 
 rawData = readmatrix(strcat(dataPosition, filename, '.txt'));
 rawData2 = readmatrix(strcat(dataPosition, filename2, '.txt'));
@@ -63,21 +65,22 @@ hold off
 
 
 dim = [.14 .20 .3 .3];
-str = sprintf('GBWP = %.2e', 4.40e5  ) ;
+str = sprintf('GBWP = %.2e', GBWP(1)  ) ;
 annotation('textbox',dim,'String',str,'FitBoxToText','on', 'Interpreter', 'tex', 'BackgroundColor', 'white');
 
 dim = [.14 .40 .3 .3];
-str = sprintf('GBWP = %.2e', 4.55e5  ) ;
+str = sprintf('GBWP = %.2e', GBWP(2) ) ;
 annotation('textbox',dim,'String',str,'FitBoxToText','on', 'Interpreter', 'tex', 'BackgroundColor', 'white');
 
 dim = [.14 .60 .3 .3];
-str = sprintf('GBWP = %.2e', 4.54e5  ) ;
+str = sprintf('GBWP = %.2e', GBWP(3) ) ;
 annotation('textbox',dim,'String',str,'FitBoxToText','on', 'Interpreter', 'tex', 'BackgroundColor', 'white');
 
 
 
 
-
+set(gca, 'Position', [-0.1,0.1,1.2,0.85])
+set(gca, 'OuterPosition', [0,0,1,1])
 
 
 
