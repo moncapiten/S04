@@ -1,13 +1,13 @@
 %clear all;
 
 dataPosition = '../../Data/';
-filename = 'dataMultivib001';
+filename = 'multivib';
 
 mediaposition = '../../Media/';
 medianame = strcat('plot', filename);
 
 flagSave = false;
-flagFit = true;
+flagFit = false;
 flagResiduals = true;
 
 
@@ -15,10 +15,10 @@ flagResiduals = true;
 rawData = readmatrix(strcat(dataPosition, filename, '.txt'));
 
 tt = rawData(:, 1);
-vi = rawData(:, 3);
+vi = rawData(:, 2);
 s_i =  repelem(0.1, length(tt));
 %s_i = repelem(2.2e-2, length(tt));
-vo = rawData(:, 2);
+vo = rawData(:, 3);
 s_o = repelem(5.3e-2, length(tt));
 
 
@@ -66,7 +66,7 @@ vi1 = [];
 tt1 = [];
 s_i1 = [];
 for i = 1:length(vi)
-    if abs(vi(i)) > 4.6
+    if abs(vi(i)) > 0
         vi1 = [vi1, vi(i)];
         tt1 = [tt1, tt(i)];
         s_i1 = [s_i1, s_i(1)];
@@ -76,32 +76,25 @@ end
 length(s_i1)
 
 vi = vi1;
-tt = tt1;
+
 s_i = s_i1;
 
-
-length(s_i)
-length(vi)
-length(tt)
-[betai, Ri, ~, covbetai] = nlinfit(tt, vi, @funcSquare, p0i );
+if flagFit
+    [betai, Ri, ~, covbetai] = nlinfit(tt, vi, @funcSquare, p0i );
 %[betai, Ri, ~, covbetai] = nlinfit(tt, vi, @funcSquare, p0i, Weights= s_i );
 %[betai, Ri] = lsqcurvefit(@funcSquare, p0i, tt1, vi1);
-Ri;
-betai
-
-
-ki = 0;
-for i = 1:length(Ri)
-    ki = ki + Ri(i)^2/s_i1(i)^2;
+    ki = 0;
+    for i = 1:length(Ri)
+        ki = ki + Ri(i)^2/s_i1(i)^2;
+    end
+    ki = ki/(length(tt)-4);
+    
+    ko = 0;
+    for i = 1:length(Ro)
+        ko = ko + Ro(i)^2/s_o(i)^2;
+    end
+    ko = ko/(length(tt)-4);
 end
-ki = ki/(length(tt)-4);
-
-ko = 0;
-for i = 1:length(Ro)
-    ko = ko + Ro(i)^2/s_o(i)^2;
-end
-ko = ko/(length(tt)-4);
-
 
 ki;
 ko;
@@ -115,7 +108,7 @@ if flagFit
     % plot of the data, prefit and fit
     ax1 = nexttile([1 2]);
     
-    errorbar(tt, vi, s_i, 'o', Color= "#0027BD");
+    errorbar(tt1, vi, s_i, 'o', Color= "#0027BD");
     hold on
     %errorbar(tt, vo, s_o, 'v', Color= "Red");
 %    errorbar(tt1, vo1, s_o(1:length(vo1)), 'v', Color= 'Green');
@@ -135,7 +128,7 @@ if flagFit
         ax2 = nexttile([1 1]);
         plot(tt, repelem(0, length(tt)), '--', Color= 'black');
         hold on
-        errorbar(tt, Ri, s_i, 'o', Color= '#0072BD');
+        errorbar(tt1, Ri, s_i, 'o', Color= '#0072BD');
         hold off
         grid on
         grid minor
@@ -178,7 +171,7 @@ if flagFit
         ylabel(ax2, 'Amplitude - Residuals [V]');
     end
 else
-    errorbar(tt, vi, s_i, 'o', Color= "#0027BD");
+    errorbar(tt1, vi, s_i, 'o', Color= "#0027BD");
     hold on
     errorbar(tt, vo, s_o, 'o', Color= "Red");
     grid on
@@ -186,7 +179,7 @@ else
 end
 
 if ~flagFit | ( flagFit & ~flagResiduals )
-    title(strcat('Data plot - ', filename))
+    title(strcat('Data plot -', medianame))
     xlabel('time [s]');
     ylabel('Amplitude [V]')
     if flagFit
