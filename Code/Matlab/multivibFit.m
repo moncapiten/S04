@@ -1,7 +1,7 @@
 %clear all;
 
 dataPosition = '../../Data/';
-filename = 'multivib';
+filename = 'dataSchmitt002';
 
 mediaposition = '../../Media/';
 medianame = strcat('plot', filename);
